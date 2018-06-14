@@ -1,9 +1,16 @@
 const DEFAULT_HTTPS_PORT = 443;
 
+const adapterMethods = [
+    "_options",
+    "_head",
+    "_get",
+    "_post",
+    "_put",
+    "_delete"
+];
+
 class Sqvirrel {
     constructor({ host, port = DEFAULT_HTTPS_PORT, headers, adapter }) {
-        const { _options, _get, _head, _post, _put, _delete } = adapter;
-
         if (!host) {
             throw new Error("host URL is mandatory");
         }
@@ -15,25 +22,19 @@ class Sqvirrel {
         if (adapter) {
             this.applyAdapter(adapter);
         }
-
-        this._options = _options;
-        this._get = _get;
-        this._head = _head;
-        this._post = _post;
-        this._put = _put;
-        this._delete = _delete;
     }
 
     applyAdapter(adapter) {
-        const { _options, _get, _head, _post, _put, _delete } = adapter;
-
-        this._options = _options;
-        this._get = _get || null;
-        this._head = _head || null;
-        this._post = _post || null;
-        this._put = _put || null;
-        this._put = _delete || null;
-
+        if (adapter && typeof adapter === "object") {
+            adapterMethods.forEach((method) => {
+                if (adapter[method] && typeof adapter[method] === "function") {
+                    this[method] = method;
+                } else {
+                    this[method] = null;
+                    console.error(`Invalid entry ${method} in applyAdapter`);
+                }
+            });
+        }
     }
 
     async options({ restPath, additionalHeaders }) {
