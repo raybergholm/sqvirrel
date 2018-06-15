@@ -12,10 +12,10 @@ const _options = async ({ host, restPath, headers = null }) => {
     return await request;
 };
 
-const _get = async ({ host, restPath, headers = null, query = null }) => {
-    const url = restPath ? `${host}/${restPath}` : host;
+const _head = async ({ restPath, headers = null, query = null }) => {
+    const url = restPath ? `${this.hostUrl}/${restPath}` : this.hostUrl;
 
-    const request = superagent.get(url);
+    const request = superagent.head(url);
 
     if (headers) {
         request.set(headers);
@@ -28,10 +28,10 @@ const _get = async ({ host, restPath, headers = null, query = null }) => {
     return await request;
 };
 
-const _head = async ({ restPath, headers = null, query = null }) => {
-    const url = restPath ? `${this.hostUrl}/${restPath}` : this.hostUrl;
+const _get = async ({ host, restPath, headers = null, query = null }) => {
+    const url = restPath ? `${host}/${restPath}` : host;
 
-    const request = superagent.head(url);
+    const request = superagent.get(url);
 
     if (headers) {
         request.set(headers);
