@@ -1,18 +1,20 @@
 const DEFAULT_HTTPS_PORT = 443;
 
-const adapterMethods = [
+const ADAPTER_METHODS = Object.freeze([
     "_options",
     "_head",
     "_get",
     "_post",
     "_put",
     "_delete"
-];
+]);
 
 class Sqvirrel {
-    constructor({ host, port = DEFAULT_HTTPS_PORT, headers, adapter }) {
+    constructor(params = {}) {
+        const { host, port = DEFAULT_HTTPS_PORT, headers = {}, adapter = null } = params;
+
         if (!host) {
-            throw new Error("host URL is mandatory");
+            throw new Error("Host URL is mandatory");
         }
 
         this.host = host;
@@ -26,70 +28,91 @@ class Sqvirrel {
 
     applyAdapter(adapter) {
         if (adapter && typeof adapter === "object") {
-            adapterMethods.forEach((method) => {
+            ADAPTER_METHODS.forEach((method) => {
                 if (adapter[method] && typeof adapter[method] === "function") {
-                    this[method] = method;
+                    this[method] = adapter[method];
                 } else {
                     this[method] = null;
-                    console.error(`Invalid entry ${method} in applyAdapter`);
+                    // console.error(`Invalid entry ${method} in applyAdapter`);
                 }
             });
         }
     }
 
-    async options({ restPath, additionalHeaders }) {
+    removeAdapter() {
+        ADAPTER_METHODS.forEach((method) => {
+            this[method] = method;
+        });
+    }
+
+    async options(params = {}) {
         if (!this._options) {
-            throw new Error("Missing OPTIONS adapter method");
+            throw new Error("Missing _options adapter method");
         }
 
-        const headers = Object.assign({}, this.headers, additionalHeaders);
-        return this._options({ host: this.host, restPath, headers });
-    }
-
-    async get({ restPath, query, additionalHeaders }) {
-        if (!this._get) {
-            throw new Error("Missing GET adapter method");
-        }
+        const { restPath, additionalHeaders } = params;
 
         const headers = Object.assign({}, this.headers, additionalHeaders);
-        return this._get({ host: this.host, restPath, headers, query });
+        return await this._options({ host: this.host, restPath, headers });
     }
 
-    async head({ restPath, query = null, additionalHeaders = {} }) {
+    async head(params = {}) {
         if (!this._head) {
-            throw new Error("Missing HEAD adapter method");
+            return Promise.reject(new Error("Missing _head adapter method"));
         }
 
+        const { restPath, query = null, additionalHeaders = {} } = params;
+
         const headers = Object.assign({}, this.headers, additionalHeaders);
-        return this._head({ host: this.host, restPath, headers, query });
+        return await this._head({ host: this.host, restPath, headers, query });
     }
 
-    async post({ restPath, body, additionalHeaders }) {
+    async get(params = {}) {
+        if (!this._get) {
+            return Promise.reject(new Error("Missing _get adapter method"));
+        }
+
+        const { restPath, query = null, additionalHeaders = {} } = params;
+
+        const headers = Object.assign({}, this.headers, additionalHeaders);
+        return await this._get({ host: this.host, restPath, headers, query });
+    }
+
+    async post(params = {}) {
         if (!this._post) {
-            throw new Error("Missing POST adapter method");
+            return Promise.reject(new Error("Missing _post adapter method"));
         }
 
+        const { restPath, body = null, additionalHeaders = {} } = params;
+
         const headers = Object.assign({}, this.headers, additionalHeaders);
-        return this._post({ host: this.host, restPath, headers, body });
+        return await this._post({ host: this.host, restPath, headers, body });
     }
 
-    async put({ restPath, body = "", additionalHeaders = {} }) {
+    async put(params = {}) {
         if (!this._put) {
-            throw new Error("Missing PUT adapter method");
+            return Promise.reject(new Error("Missing _put adapter method"));
         }
 
+        const { restPath, body = null, additionalHeaders = {} } = params;
+
         const headers = Object.assign({}, this.headers, additionalHeaders);
-        return this._post({ host: this.host, restPath, headers, body });
+        return await this._put({ host: this.host, restPath, headers, body });
     }
 
-    async delete({ restPath, query = null, additionalHeaders = {} }) {
+    async delete(params = {}) {
         if (!this._delete) {
-            throw new Error("Missing DELETE adapter method");
+            return Promise.reject(new Error("Missing _delete adapter method"));
         }
 
+        const { restPath, query = null, additionalHeaders = {} } = params;
+
         const headers = Object.assign({}, this.headers, additionalHeaders);
-        return this._delete({ host: this.host, restPath, headers, query });
+        return await this._delete({ host: this.host, restPath, headers, query });
     }
 }
 
-export default Sqvirrel;
+module.exports = {
+    Sqvirrel,
+    ADAPTER_METHODS
+};
