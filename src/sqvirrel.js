@@ -1,3 +1,5 @@
+const { settle, bifurcate } = require("./utils/helpers");
+
 const DEFAULT_HTTPS_PORT = 443;
 
 const ADAPTER_METHODS = Object.freeze([
@@ -109,6 +111,17 @@ class Sqvirrel {
 
         const headers = Object.assign({}, this.headers, additionalHeaders);
         return await this._delete({ host: this.host, restPath, headers, query });
+    }
+
+    async batchRequest(calls){
+        const response = await settle(calls);
+        
+        const results = bifurcate(response, (entry) => !entry.error);
+
+        return {
+            responses: results[0],
+            errors: results[1]
+        };
     }
 }
 
