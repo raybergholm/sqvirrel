@@ -52,10 +52,10 @@ class Sqvirrel {
             throw new Error("Missing _options adapter method");
         }
 
-        const { restPath, additionalHeaders } = params;
+        const { restPath, additionalHeaders, ...others } = params;
 
         const headers = Object.assign({}, this.headers, additionalHeaders);
-        return await this._options({ host: this.host, port: this.port, restPath, headers });
+        return await this._options({ host: this.host, port: this.port, restPath, headers, others });
     }
 
     async head(params = {}) {
@@ -63,10 +63,10 @@ class Sqvirrel {
             return Promise.reject(new Error("Missing _head adapter method"));
         }
 
-        const { restPath, query = null, additionalHeaders = {} } = params;
+        const { restPath, query = null, additionalHeaders = {}, ...others } = params;
 
         const headers = Object.assign({}, this.headers, additionalHeaders);
-        return await this._head({ host: this.host, port: this.port, restPath, headers, query });
+        return await this._head({ host: this.host, port: this.port, restPath, headers, query, others });
     }
 
     async get(params = {}) {
@@ -74,10 +74,10 @@ class Sqvirrel {
             return Promise.reject(new Error("Missing _get adapter method"));
         }
 
-        const { restPath, query = null, additionalHeaders = {} } = params;
+        const { restPath, query = null, additionalHeaders = {}, ...others } = params;
 
         const headers = Object.assign({}, this.headers, additionalHeaders);
-        return await this._get({ host: this.host, port: this.port, restPath, headers, query });
+        return await this._get({ host: this.host, port: this.port, restPath, headers, query, others });
     }
 
     async post(params = {}) {
@@ -85,10 +85,10 @@ class Sqvirrel {
             return Promise.reject(new Error("Missing _post adapter method"));
         }
 
-        const { restPath, body = null, additionalHeaders = {} } = params;
+        const { restPath, body = null, additionalHeaders = {}, ...others } = params;
 
         const headers = Object.assign({}, this.headers, additionalHeaders);
-        return await this._post({ host: this.host, port: this.port, restPath, headers, body });
+        return await this._post({ host: this.host, port: this.port, restPath, headers, body, others });
     }
 
     async put(params = {}) {
@@ -96,10 +96,10 @@ class Sqvirrel {
             return Promise.reject(new Error("Missing _put adapter method"));
         }
 
-        const { restPath, body = null, additionalHeaders = {} } = params;
+        const { restPath, body = null, additionalHeaders = {}, ...others } = params;
 
         const headers = Object.assign({}, this.headers, additionalHeaders);
-        return await this._put({ host: this.host, port: this.port, restPath, headers, body });
+        return await this._put({ host: this.host, port: this.port, restPath, headers, body, others });
     }
 
     async delete(params = {}) {
@@ -107,10 +107,10 @@ class Sqvirrel {
             return Promise.reject(new Error("Missing _delete adapter method"));
         }
 
-        const { restPath, query = null, additionalHeaders = {} } = params;
+        const { restPath, query = null, additionalHeaders = {}, ...others } = params;
 
         const headers = Object.assign({}, this.headers, additionalHeaders);
-        return await this._delete({ host: this.host, port: this.port, restPath, headers, query });
+        return await this._delete({ host: this.host, port: this.port, restPath, headers, query, others });
     }
 
     async batchRequest(calls){
