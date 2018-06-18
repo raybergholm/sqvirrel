@@ -12,8 +12,8 @@ const _options = async ({ host, restPath, headers = null }) => {
     return await request;
 };
 
-const _head = async ({ restPath, headers = null, query = null }) => {
-    const url = restPath ? `${this.hostUrl}/${restPath}` : this.hostUrl;
+const _head = async ({ host, restPath, headers = null, query = null }) => {
+    const url = restPath ? `${host}/${restPath}` : host;
 
     const request = superagent.head(url);
 
@@ -44,8 +44,8 @@ const _get = async ({ host, restPath, headers = null, query = null }) => {
     return await request;
 };
 
-const _post = async ({ restPath, headers = null, query = null, body = null }) => {
-    const url = restPath ? `${this.hostUrl}/${restPath}` : this.hostUrl;
+const _post = async ({ host, restPath, headers = null, query = null, body = null }) => {
+    const url = restPath ? `${host}/${restPath}` : host;
 
     const request = superagent.post(url);
 
@@ -64,8 +64,8 @@ const _post = async ({ restPath, headers = null, query = null, body = null }) =>
     return await request;
 };
 
-const _put = async ({ restPath, headers = null, query = null, body = null }) => {
-    const url = restPath ? `${this.hostUrl}/${restPath}` : this.hostUrl;
+const _put = async ({ host, restPath, headers = null, query = null, body = null }) => {
+    const url = restPath ? `${host}/${restPath}` : host;
 
     const request = superagent.put(url);
 
@@ -84,8 +84,8 @@ const _put = async ({ restPath, headers = null, query = null, body = null }) => 
     return await request;
 };
 
-const _delete = async ({ restPath, headers = null, query = null }) => {
-    const url = restPath ? `${this.hostUrl}/${restPath}` : this.hostUrl;
+const _delete = async ({ host, restPath, headers = null, query = null }) => {
+    const url = restPath ? `${host}/${restPath}` : host;
 
     const request = superagent.delete(url);
 
