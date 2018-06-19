@@ -1,6 +1,6 @@
 const superagent = require("superagent");
 
-const _options = async ({ host, restPath, headers = null }) => {
+const _options = async ({ host, restPath, headers = null, ...passthrough }) => {
     const url = restPath ? `${host}/${restPath}` : host;
 
     const request = superagent.options(url);
@@ -9,10 +9,14 @@ const _options = async ({ host, restPath, headers = null }) => {
         request.set(headers);
     }
 
-    return await request;
+    const response = await request;
+    return {
+        response,
+        ...passthrough
+    };
 };
 
-const _head = async ({ host, restPath, headers = null, query = null }) => {
+const _head = async ({ host, restPath, headers = null, query = null, ...passthrough }) => {
     const url = restPath ? `${host}/${restPath}` : host;
 
     const request = superagent.head(url);
@@ -25,10 +29,14 @@ const _head = async ({ host, restPath, headers = null, query = null }) => {
         request.query(query);
     }
 
-    return await request;
+    const response = await request;
+    return {
+        response,
+        ...passthrough
+    };
 };
 
-const _get = async ({ host, restPath, headers = null, query = null }) => {
+const _get = async ({ host, restPath, headers = null, query = null, ...passthrough }) => {
     const url = restPath ? `${host}/${restPath}` : host;
 
     const request = superagent.get(url);
@@ -41,10 +49,14 @@ const _get = async ({ host, restPath, headers = null, query = null }) => {
         request.query(query);
     }
 
-    return await request;
+    const response = await request;
+    return {
+        response,
+        ...passthrough
+    };
 };
 
-const _post = async ({ host, restPath, headers = null, query = null, body = null }) => {
+const _post = async ({ host, restPath, headers = null, query = null, body = null, ...passthrough }) => {
     const url = restPath ? `${host}/${restPath}` : host;
 
     const request = superagent.post(url);
@@ -61,10 +73,14 @@ const _post = async ({ host, restPath, headers = null, query = null, body = null
         request.send(body);
     }
 
-    return await request;
+    const response = await request;
+    return {
+        response,
+        ...passthrough
+    };
 };
 
-const _put = async ({ host, restPath, headers = null, query = null, body = null }) => {
+const _put = async ({ host, restPath, headers = null, query = null, body = null, ...passthrough }) => {
     const url = restPath ? `${host}/${restPath}` : host;
 
     const request = superagent.put(url);
@@ -81,10 +97,14 @@ const _put = async ({ host, restPath, headers = null, query = null, body = null 
         request.send(body);
     }
 
-    return await request;
+    const response = await request;
+    return {
+        response,
+        ...passthrough
+    };
 };
 
-const _delete = async ({ host, restPath, headers = null, query = null }) => {
+const _delete = async ({ host, restPath, headers = null, query = null, ...passthrough }) => {
     const url = restPath ? `${host}/${restPath}` : host;
 
     const request = superagent.delete(url);
@@ -97,7 +117,11 @@ const _delete = async ({ host, restPath, headers = null, query = null }) => {
         request.query(query);
     }
 
-    return await request;
+    const response = await request;
+    return {
+        response,
+        ...passthrough
+    };
 };
 
 
