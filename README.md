@@ -12,12 +12,50 @@ The goal of Sqvirrel is to be light, easy to learn and simple to use. Just like 
 
 ## Instantiation
 
+A Sqvirrel instance must always contain the base host URL in the constructor, otherwise it will throw an error. All other fields are optional during instantiation and can be supplied later.
+
 ```javascript
+    // YOU CAN PUT EVERYTHING IN THE CONSTRUCTOR
+
     const instance = new Sqvirrel({
-        host: "YOUR HOST URL",
-        port: "YOUR PORT"      // defaults to 443
-        headers: { }           // object of headers to include with all requests
-        adapter: adapterObj    // apdater for 
+        host: "https://www.myurl.com", 
+        port: 433           // defaults to 443
+        headers: {     
+            "Authorization": "Basic ZWFzdGVyX2VnZzpmb3JfeW91IQ==",
+            "Content-Type": "application/json"
+        }                   // object of headers to include with all requests (defaults to an empty object)   
+        adapter: adapter    // adapter for a HTTP library
+    });
+
+    // OR CALL USE() SEPARATELY AFTER INSTANTIATION
+
+    const instance = new Sqvirrel({
+        host: "https://www.myurl.com", 
+        port: 433
+        headers: { 
+            "Authorization": "Basic ZWFzdGVyX2VnZzpmb3JfeW91IQ==",
+            "Content-Type": "application/json"
+        }
+    });
+    instance.use(adapter)
+
+    // OR CHAIN USE() AFTER THE CONSTRUCTOR
+
+    const instance = new Sqvirrel({
+        host: "https://www.myurl.com",
+        headers: { 
+            "Authorization": "Basic ZWFzdGVyX2VnZzpmb3JfeW91IQ==",
+            "Content-Type": "application/json"
+        }
+    }).use(adapter);
+
+    // OR CHAIN MULTIPLE THINGS
+
+    const instance = new Sqvirrel({
+        host: "https://www.myurl.com"
+    }).use(adapter).mergeHeaders({
+        "Authorization": "Basic ZWFzdGVyX2VnZzpmb3JfeW91IQ==",
+        "Content-Type": "application/json"
     });
 ```
 
@@ -26,20 +64,22 @@ Call the instance's methods directly (options, head, get, post, put, delete) and
 
 ## Batching requests
 If you need to make a series of concurrent and independent calls:
-Make the calls which go into the same batch and save the request into an iterable (array, Set, etc) 
+* Make the calls which go into the same batch and store the request in an iterable (array, Set, etc) 
+* Call the batchRequests method with the requests as the input parameter. This will process the requests and split the results into success/error.
+* Access the return value of batchRequests using await or .then
 
 Example:
 ```javascript
     const batch = [
         // add the requests which should be batched together, don't use await here!
-        sqvirrel.get({/* params */}),   
-        sqvirrel.post({/* params */}),
-        sqvirrel.post({/* params */})
+        instance.get({/* params */}),   
+        instance.post({/* params */}),
+        instance.post({/* params */})
     ];
 
     // USING AWAIT
 
-    const { success, errors } = await sqvirrel.batchRequest(batch); // pass all the batched requests, use await or .then
+    const { success, errors } = await instance.batchRequest(batch); // pass all the batched requests, use await or .then
 
     success.forEach((successfulEntry) => {
         // handle successful requests
