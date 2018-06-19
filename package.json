@@ -2,14 +2,16 @@
     "private": true,
     "name": "sqvirrel",
     "version": "0.1.0",
-    "author": "Raymond Bergholm",
+    "author": {
+        "name": "Raymond Bergholm",
+        "url": "http://www.github.com/raybergholm"
+    },
     "description": "",
     "repository": {
         "type": "git",
         "url": "https://github.com/raybergholm/sqvirrel.git"
     },
     "license": "MIT",
-    "main": "",
     "scripts": {
         "test": "mocha --compilers js:babel-core/register 'tests/*.test.js'"
     },

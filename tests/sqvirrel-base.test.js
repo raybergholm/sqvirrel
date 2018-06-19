@@ -7,7 +7,7 @@ chai.use(chaiAsPromised);
 const expect = chai.expect;
 const should = chai.should;
 
-const { Sqvirrel, ADAPTER_METHODS } = require("../src/sqvirrel");
+const { Sqvirrel, ADAPTER_METHODS } = require("../lib/Sqvirrel");
 
 const expectedAdapterMethods = [
     "_options",
