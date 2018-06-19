@@ -66,7 +66,7 @@ class Sqvirrel {
         const { restPath, query = null, additionalHeaders = {}, ...others } = params;
 
         const headers = Object.assign({}, this.headers, additionalHeaders);
-        return await this._head({ host: this.host, port: this.port, restPath, headers, query, others });
+        return await this._head({ host: this.host, port: this.port, restPath, headers, query, ...others });
     }
 
     async get(params = {}) {
@@ -77,7 +77,7 @@ class Sqvirrel {
         const { restPath, query = null, additionalHeaders = {}, ...others } = params;
 
         const headers = Object.assign({}, this.headers, additionalHeaders);
-        return await this._get({ host: this.host, port: this.port, restPath, headers, query, others });
+        return await this._get({ host: this.host, port: this.port, restPath, headers, query, ...others });
     }
 
     async post(params = {}) {
@@ -88,7 +88,7 @@ class Sqvirrel {
         const { restPath, body = null, additionalHeaders = {}, ...others } = params;
 
         const headers = Object.assign({}, this.headers, additionalHeaders);
-        return await this._post({ host: this.host, port: this.port, restPath, headers, body, others });
+        return await this._post({ host: this.host, port: this.port, restPath, headers, body, ...others });
     }
 
     async put(params = {}) {
@@ -99,7 +99,7 @@ class Sqvirrel {
         const { restPath, body = null, additionalHeaders = {}, ...others } = params;
 
         const headers = Object.assign({}, this.headers, additionalHeaders);
-        return await this._put({ host: this.host, port: this.port, restPath, headers, body, others });
+        return await this._put({ host: this.host, port: this.port, restPath, headers, body, ...others });
     }
 
     async delete(params = {}) {
@@ -110,7 +110,7 @@ class Sqvirrel {
         const { restPath, query = null, additionalHeaders = {}, ...others } = params;
 
         const headers = Object.assign({}, this.headers, additionalHeaders);
-        return await this._delete({ host: this.host, port: this.port, restPath, headers, query, others });
+        return await this._delete({ host: this.host, port: this.port, restPath, headers, query, ...others });
     }
 
     async batchRequest(calls){
