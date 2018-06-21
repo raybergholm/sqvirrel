@@ -89,18 +89,25 @@ If you need to make some concurrent and independent calls together:
 * Call the multi method with the requests as the input parameter. This will process the requests and split the results into success/error.
 * Access the return value of batchRequests using await or .then
 
-Example:
+Example input requests:
 ```javascript
     const requests = [
-        // add the requests which should be sent together, don't use await here!
-        instance.get({/* params */}),   
-        instance.post({/* params */}),
-        instance.post({/* params */})
+        // add the requests which should be sent together, don't use await or .then here!
+        instance.get(params),   
+        instance.post(params),
+        instance.post(params)
     ];
 
-    // USING AWAIT
+    const requests = new Set([  // Sets are also fine
+        instance.get(params),   
+        instance.post(params),
+        instance.post(params)
+    ]);
+```
 
-    const { success, errors } = await instance.multi(requests); // pass all the batched requests, use await or .then
+Get the results using `await`
+```javascript
+    const { success, errors } = await instance.multi(requests);
 
     success.forEach((successfulEntry) => {
         // handle successful requests
@@ -110,8 +117,10 @@ Example:
         // handle errors
     });
 
-    // USING .THEN
+```
 
+Get the results using `.then`
+```javascript
     const batchResponse = instance.multi(batch);
 
     batchResponse.then(({ success, errors }) => {
