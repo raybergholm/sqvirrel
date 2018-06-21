@@ -1,4 +1,4 @@
-const { Sqvirrel, ADAPTER_METHODS } = require("./lib/Sqvirrel");
+const { Sqvirrel, ADAPTER_METHODS } = require("./lib/sqvirrel");
 
 const basicAuth = require("./lib/utils/basicAuth");
 const utils = {
